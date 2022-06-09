@@ -1,6 +1,9 @@
 require("dotenv").config();
-const { request } = require("express");
 const express = require("express");
+const mongoose = require("mongoose");
+
+// import routes
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
@@ -8,18 +11,18 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
     res.send("Fullstack React Course");
 });
 
-app.post("/name", (req, res) => {
-    if (req.body.name) {
-        return res.json({ name: req.body.name });
-    } else {
-        return res.status(400).json({ error: "No name provided" });
-    }
-})
+app.use("/api/auth", authRoutes);
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server runing on ${process.env.PORT}`);
-});
+mongoose.connect(process.env.MONGO_URI).then(() => {
+    console.log('Connected to DB');
+
+    app.listen(process.env.PORT, () => {
+        console.log(`Server running on ${process.env.PORT}`);
+    });
+}).catch((error) => {
+    console.log(error);
+})
