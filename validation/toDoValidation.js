@@ -5,7 +5,7 @@ const validateToDoInput = data => {
     let errors = {};
 
     // check content field
-    if (!isEmpty(data.content)) {
+    if (isEmpty(data.content)) {
         errors.content = "Content field can not be empty";
     } else if (!Validator.isLength(data.content, { min: 1, max: 300 })) {
         errors.content = "Content filed must be between 1 and 300 characters";
